@@ -89,6 +89,9 @@ void _ipu_ic_enable_task(struct ipu_soc *ipu, ipu_channel_t channel)
 {
 	uint32_t ic_conf;
 
+    pr_info("%s: enabling task with channel %i",
+            __FUNCTION__, channel);
+
 	ic_conf = ipu_ic_read(ipu, IC_CONF);
 	switch (channel) {
 	case CSI_PRP_VF_MEM:
@@ -118,6 +121,7 @@ void _ipu_ic_enable_task(struct ipu_soc *ipu, ipu_channel_t channel)
 		ic_conf |= IC_CONF_PP_ROT_EN;
 		break;
 	default:
+
 		break;
 	}
 	ipu_ic_write(ipu, ic_conf, IC_CONF);

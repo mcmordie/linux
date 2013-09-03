@@ -102,8 +102,10 @@ static int csi_enc_setup(cam_data *cam)
 		return -EINVAL;
 	}
 
-    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SGBRG10)
+    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SBGGR10)
         pixel_fmt = IPU_PIX_FMT_GENERIC;
+    else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_GREY)
+        pixel_fmt = IPU_PIX_FMT_GREY;
     else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420)
 		pixel_fmt = IPU_PIX_FMT_YUV420P;
 	else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YVU420)
@@ -169,6 +171,8 @@ static int csi_enc_setup(cam_data *cam)
 		printk(KERN_ERR "ipu_init_channel %d\n", err);
 		return err;
 	}
+
+    pr_info("setting up ipu from %s", __FUNCTION__);
 
 	err = ipu_init_channel_buffer(cam->ipu, CSI_MEM, IPU_OUTPUT_BUFFER,
 				      pixel_fmt, cam->v2f.fmt.pix.width,

@@ -87,8 +87,8 @@ static int prp_enc_setup(cam_data *cam)
 	ipu_csi_get_window_size(cam->ipu, &enc.csi_prp_enc_mem.in_width,
 				&enc.csi_prp_enc_mem.in_height, cam->csi);
 
-    enc.csi_prp_enc_mem.in_pixel_fmt = IPU_PIX_FMT_UYVY; //DMJM: looks like this was hardcoded
-    //enc.csi_prp_enc_mem.in_pixel_fmt = IPU_PIX_FMT_GENERIC;
+    //enc.csi_prp_enc_mem.in_pixel_fmt = IPU_PIX_FMT_UYVY; //DMJM: looks like this was hardcoded
+    enc.csi_prp_enc_mem.in_pixel_fmt = IPU_PIX_FMT_GENERIC;
 	enc.csi_prp_enc_mem.out_width = cam->v2f.fmt.pix.width;
 	enc.csi_prp_enc_mem.out_height = cam->v2f.fmt.pix.height;
 	enc.csi_prp_enc_mem.csi = cam->csi;
@@ -97,7 +97,7 @@ static int prp_enc_setup(cam_data *cam)
 		enc.csi_prp_enc_mem.out_height = cam->v2f.fmt.pix.width;
 	}
 
-    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SGBRG10) {
+    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SBGGR10) {
         enc.csi_prp_enc_mem.out_pixel_fmt = IPU_PIX_FMT_GENERIC;
         pr_info("SGBBR10\n");
     } else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420) {

@@ -532,6 +532,9 @@ int32_t ipu_init_channel(struct ipu_soc *ipu, ipu_channel_t channel, ipu_channel
 
 		/*SMFC setting*/
 		if (params->csi_mem.mipi_en) {
+
+            pr_info("configuring SMFC for MIPI");
+
 			ipu_conf |= (1 << (IPU_CONF_CSI0_DATA_SOURCE_OFFSET +
 				params->csi_mem.csi));
 			_ipu_smfc_init(ipu, channel, params->csi_mem.mipi_vc,
@@ -1080,6 +1083,7 @@ int32_t ipu_init_channel_buffer(struct ipu_soc *ipu, ipu_channel_t channel,
 	uint32_t reg;
 	uint32_t dma_chan;
 	uint32_t burst_size;
+    uint32_t ic_conf;
 
 	dma_chan = channel_2_dma(channel, type);
 	if (!idma_is_valid(dma_chan))
@@ -1166,15 +1170,29 @@ int32_t ipu_init_channel_buffer(struct ipu_soc *ipu, ipu_channel_t channel,
 		_ipu_ic_idma_init(ipu, dma_chan, width, height, burst_size,
 			rot_mode);
 	} else if (_ipu_is_smfc_chan(dma_chan)) {
-		burst_size = _ipu_ch_param_get_burst_size(ipu, dma_chan);
+
+        pr_info("Detected SMFC Channel");
+
+        burst_size = _ipu_ch_param_get_burst_size(ipu, dma_chan);
 		if ((pixel_fmt == IPU_PIX_FMT_GENERIC) &&
 			((_ipu_ch_param_get_bpp(ipu, dma_chan) == 5) ||
-			(_ipu_ch_param_get_bpp(ipu, dma_chan) == 3)))
+            (_ipu_ch_param_get_bpp(ipu, dma_chan) == 3))){
 			burst_size = burst_size >> 4;
-		else
+        }
+        else{
 			burst_size = burst_size >> 2;
-		_ipu_smfc_set_burst_size(ipu, channel, burst_size-1);
-	}
+        }
+        _ipu_smfc_set_burst_size(ipu, channel, burst_size-1);
+
+        //DMJM: new code:
+        pr_info("!!! setting RWS enable for generic sensor");
+        if (pixel_fmt  == IPU_PIX_FMT_GENERIC){
+            ic_conf = ipu_ic_read(ipu, IC_CONF);
+            ic_conf |= IC_CONF_RWS_EN;
+            ic_conf &= ~IC_CONF_CSI_MEM_WR_EN;
+            ipu_ic_write(ipu, ic_conf, IC_CONF);
+        }
+    }
 
 	/* AXI-id */
 	if (idma_is_set(ipu, IDMAC_CHA_PRI, dma_chan)) {
@@ -1941,6 +1959,8 @@ int32_t ipu_enable_channel(struct ipu_soc *ipu, ipu_channel_t channel)
 
 	mutex_lock(&ipu->mutex_lock);
 
+    pr_info("Enabling channel");
+
 	if (ipu->channel_enable_mask & (1L << IPU_CHAN_ID(channel))) {
 		dev_err(ipu->dev, "Warning: channel already enabled %d\n",
 			IPU_CHAN_ID(channel));
@@ -2022,8 +2042,9 @@ int32_t ipu_enable_channel(struct ipu_soc *ipu, ipu_channel_t channel)
 
 	if (_ipu_is_ic_chan(in_dma) || _ipu_is_ic_chan(out_dma) ||
 		_ipu_is_irt_chan(in_dma) || _ipu_is_irt_chan(out_dma) ||
-		_ipu_is_vdi_out_chan(out_dma))
+        _ipu_is_vdi_out_chan(out_dma)) {
 		_ipu_ic_enable_task(ipu, channel);
+    }
 
 	ipu->channel_enable_mask |= 1L << IPU_CHAN_ID(channel);
 
@@ -2785,6 +2806,7 @@ uint32_t bytes_per_pixel(uint32_t fmt)
 {
 	switch (fmt) {
     case IPU_PIX_FMT_GENERIC:	/*generic data */
+    case IPU_PIX_FMT_GREY:
     case IPU_PIX_FMT_RGB332:
 	case IPU_PIX_FMT_YUV420P:
 	case IPU_PIX_FMT_YVU420P:

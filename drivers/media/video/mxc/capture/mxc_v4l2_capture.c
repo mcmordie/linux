@@ -48,7 +48,7 @@ static int video_nr = -1;
 
 /*! This data is used for the output to the display. */
 #define MXC_V4L2_CAPTURE_NUM_OUTPUTS	6
-#define MXC_V4L2_CAPTURE_NUM_INPUTS	1
+#define MXC_V4L2_CAPTURE_NUM_INPUTS     1
 static struct v4l2_output mxc_capture_outputs[MXC_V4L2_CAPTURE_NUM_OUTPUTS] = {
 	{
 	 .index = 0,
@@ -101,7 +101,7 @@ static struct v4l2_output mxc_capture_outputs[MXC_V4L2_CAPTURE_NUM_OUTPUTS] = {
 };
 
 static struct v4l2_input mxc_capture_inputs[MXC_V4L2_CAPTURE_NUM_INPUTS] = {
-    /*{
+ /*   {
 	 .index = 0,
 	 .name = "CSI IC MEM",
 	 .type = V4L2_INPUT_TYPE_CAMERA,
@@ -368,7 +368,8 @@ static inline int valid_mode(u32 palette)
 		(palette == V4L2_PIX_FMT_YUV420) ||
         (palette == V4L2_PIX_FMT_YVU420) ||
             (palette == V4L2_PIX_FMT_NV12) ||
-            (palette == V4L2_PIX_FMT_SGBRG10));
+            (palette == V4L2_PIX_FMT_SBGGR10) ||
+            (palette == V4L2_PIX_FMT_GREY));
 }
 
 /*!
@@ -891,11 +892,15 @@ static int mxc_v4l2_s_fmt(cam_data *cam, struct v4l2_format *f)
 			size = f->fmt.pix.width * f->fmt.pix.height * 3 / 2;
 			bytesperline = f->fmt.pix.width;
 			break;
-        case V4L2_PIX_FMT_SGBRG10:
+        case V4L2_PIX_FMT_SBGGR10:
             size = f->fmt.pix.width * f->fmt.pix.height * 2;
             bytesperline = f->fmt.pix.width * 2;
             break;
-		default:
+        case V4L2_PIX_FMT_GREY:
+            size = f->fmt.pix.width * f->fmt.pix.height;
+            bytesperline = f->fmt.pix.width;
+            break;
+        default:
 			break;
 		}
 
