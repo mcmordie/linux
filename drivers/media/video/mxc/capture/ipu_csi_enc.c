@@ -74,7 +74,7 @@ static int csi_enc_setup(cam_data *cam)
 	int csi_id;
 #endif
 
-	CAMERA_TRACE("In csi_enc_setup\n");
+    pr_info("In csi_enc_setup\n");
 	if (!cam) {
 		printk(KERN_ERR "cam private is NULL\n");
 		return -ENXIO;
@@ -102,7 +102,9 @@ static int csi_enc_setup(cam_data *cam)
 		return -EINVAL;
 	}
 
-	if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420)
+    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SGBRG10)
+        pixel_fmt = IPU_PIX_FMT_GENERIC;
+    else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420)
 		pixel_fmt = IPU_PIX_FMT_YUV420P;
 	else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YVU420)
 		pixel_fmt = IPU_PIX_FMT_YVU420P;

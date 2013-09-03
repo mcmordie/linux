@@ -187,7 +187,10 @@ ipu_csi_init_interface(struct ipu_soc *ipu, uint16_t width, uint16_t height,
 	} else if ((cfg_param.clk_mode == IPU_CSI_CLK_MODE_GATED_CLK) ||
 		   (cfg_param.clk_mode == IPU_CSI_CLK_MODE_NONGATED_CLK)) {
 		_ipu_csi_ccir_err_detection_disable(ipu, csi);
-	}
+    } else {
+        dev_err(ipu->dev, "%s(%i) %s: unrecognized sensor configuration",
+                __FILE__, __LINE__, __FUNCTION__);
+    }
 
 	dev_dbg(ipu->dev, "CSI_SENS_CONF = 0x%08X\n",
 		ipu_csi_read(ipu, csi, CSI_SENS_CONF));

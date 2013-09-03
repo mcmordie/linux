@@ -286,7 +286,7 @@ int mipi_csi2_reset(struct mipi_csi2_info *info)
 	mipi_csi2_write(info, 0x00000002, CSI2_PHY_TST_CTRL0);
 	mipi_csi2_write(info, 0x00010044, CSI2_PHY_TST_CTRL1);
 	mipi_csi2_write(info, 0x00000000, CSI2_PHY_TST_CTRL0);
-	mipi_csi2_write(info, 0x00000014, CSI2_PHY_TST_CTRL1);
+    mipi_csi2_write(info, 0x00000028, CSI2_PHY_TST_CTRL1);  // DMJM: change clock from 14 to 28 (to 280 Mbps) for OV5647
 	mipi_csi2_write(info, 0x00000002, CSI2_PHY_TST_CTRL0);
 	mipi_csi2_write(info, 0x00000000, CSI2_PHY_TST_CTRL0);
 

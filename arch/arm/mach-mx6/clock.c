@@ -3922,8 +3922,10 @@ static int _clk_emi_set_parent(struct clk *clk, struct clk *parent)
 	int mux;
 	u32 reg = __raw_readl(MXC_CCM_CSCMR1) & ~MXC_CCM_CSCMR1_ACLK_EMI_MASK;
 
-	mux = _get_mux6(parent, &axi_clk, &pll3_usb_otg_main_clk,
-			&pll2_pfd_400M, &pll2_pfd_352M, NULL, NULL);
+    //mux = _get_mux6(parent, &axi_clk, &pll3_usb_otg_main_clk,
+    //		&pll2_pfd_400M, &pll2_pfd_352M, NULL, NULL);
+    mux = _get_mux6(parent, &pll2_pfd_400M, &pll3_usb_otg_main_clk,
+            &axi_clk, &pll2_pfd_352M, NULL, NULL);
 	reg |= (mux << MXC_CCM_CSCMR1_ACLK_EMI_OFFSET);
 	__raw_writel(reg, MXC_CCM_CSCMR1);
 
@@ -3935,8 +3937,10 @@ static unsigned long _clk_emi_get_rate(struct clk *clk)
 	u32 reg, div;
 
 	reg = __raw_readl(MXC_CCM_CSCMR1);
-	div = ((reg & MXC_CCM_CSCMR1_ACLK_EMI_PODF_MASK) >>
-			MXC_CCM_CSCMR1_ACLK_EMI_PODF_OFFSET) + 1;
+//	div = ((reg & MXC_CCM_CSCMR1_ACLK_EMI_PODF_MASK) >>
+//			MXC_CCM_CSCMR1_ACLK_EMI_PODF_OFFSET) + 1;
+    div = (((reg & MXC_CCM_CSCMR1_ACLK_EMI_PODF_MASK) >>
+            MXC_CCM_CSCMR1_ACLK_EMI_PODF_OFFSET)^0x6  ) + 1;
 
 	return clk_get_rate(clk->parent) / div;
 }
@@ -5452,7 +5456,8 @@ int __init mx6_clocks_init(unsigned long ckil, unsigned long osc,
 	clk_set_parent(&ipu2_di_clk[1], &pll5_video_main_clk);
 
 	clk_set_parent(&emi_clk, &pll2_pfd_400M);
-	clk_set_rate(&emi_clk, 200000000);
+    //	clk_set_rate(&emi_clk, 200000000);
+    clk_set_rate(&emi_clk, 176000000);
 
 	/*
 	* on mx6dl, 2d core clock sources from 3d shader core clock,

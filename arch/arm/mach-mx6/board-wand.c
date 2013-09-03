@@ -635,6 +635,10 @@ static struct i2c_board_info wand_mipi_csi_i2c_board_info[] __initdata = {
 		I2C_BOARD_INFO("ov5640_mipi", 0x3C),
 		.platform_data = (void *)&wand_mipi_csi2_data,
 	},
+	{
+		I2C_BOARD_INFO("ov5647_mipi", 0x36),
+		.platform_data = (void *)&wand_mipi_csi2_data,
+	},
 };
 
 /* Platform data for MIPI CSI init */

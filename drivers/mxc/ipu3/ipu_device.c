@@ -417,6 +417,7 @@ unsigned int fmt_to_bpp(unsigned int pixelformat)
 	/*non-interleaved 422*/
 	case IPU_PIX_FMT_YUV422P:
 	case IPU_PIX_FMT_YVU422P:
+    case IPU_PIX_FMT_GENERIC:
 		bpp = 16;
 		break;
 	case IPU_PIX_FMT_BGR24:

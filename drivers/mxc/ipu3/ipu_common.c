@@ -784,6 +784,8 @@ int32_t ipu_init_channel(struct ipu_soc *ipu, ipu_channel_t channel, ipu_channel
 
 	ipu_cm_write(ipu, ipu_conf, IPU_CONF);
 
+    ipu_dump_registers(ipu);
+
 err:
 	mutex_unlock(&ipu->mutex_lock);
 	return ret;
@@ -2782,15 +2784,15 @@ EXPORT_SYMBOL(ipu_swap_channel);
 uint32_t bytes_per_pixel(uint32_t fmt)
 {
 	switch (fmt) {
-	case IPU_PIX_FMT_GENERIC:	/*generic data */
-	case IPU_PIX_FMT_RGB332:
+    case IPU_PIX_FMT_GENERIC:	/*generic data */
+    case IPU_PIX_FMT_RGB332:
 	case IPU_PIX_FMT_YUV420P:
 	case IPU_PIX_FMT_YVU420P:
 	case IPU_PIX_FMT_YUV422P:
 	case IPU_PIX_FMT_YUV444P:
 		return 1;
 		break;
-	case IPU_PIX_FMT_RGB565:
+    case IPU_PIX_FMT_RGB565:
 	case IPU_PIX_FMT_YUYV:
 	case IPU_PIX_FMT_UYVY:
 		return 2;

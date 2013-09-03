@@ -501,7 +501,8 @@ static int csi_v4l2_prepare_bufs(cam_data *cam, struct v4l2_buffer *buf)
 static inline int valid_mode(u32 palette)
 {
 	return (palette == V4L2_PIX_FMT_RGB565) ||
-	    (palette == V4L2_PIX_FMT_UYVY) || (palette == V4L2_PIX_FMT_YUV420);
+        (palette == V4L2_PIX_FMT_UYVY) || (palette == V4L2_PIX_FMT_YUV420)
+            || (palette == V4L2_PIX_FMT_SBGGR10)
 }
 
 /*!
@@ -789,6 +790,12 @@ static int csi_v4l2_s_fmt(cam_data *cam, struct v4l2_format *f)
 					       f->fmt.pix.height);
 			bytesperline = f->fmt.pix.width;
 			break;
+        case V4L2_PIX_FMT_SBGGR10:
+            size = f->fmt.pix.width * f->fmt.pix.height * 2;
+            csi_set_16bit_imagpara(f->fmt.pix.width,
+                           f->fmt.pix.height);
+            bytesperline = f->fmt.pix.width * 2;
+            break;
 		case V4L2_PIX_FMT_YUV422P:
 		case V4L2_PIX_FMT_RGB24:
 		case V4L2_PIX_FMT_BGR24:

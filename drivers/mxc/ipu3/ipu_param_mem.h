@@ -279,10 +279,14 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 
 	switch (pixel_fmt) {
 	case IPU_PIX_FMT_GENERIC:
+        pr_info("setting IDMAC channel parameters for Generic mode");
 		/*Represents 8-bit Generic data */
-		ipu_ch_param_set_field(&params, 0, 107, 3, 5);	/* bits/pixel */
-		ipu_ch_param_set_field(&params, 1, 85, 4, 6);	/* pix format */
-		ipu_ch_param_set_field(&params, 1, 78, 7, 63);	/* burst size */
+//      ipu_ch_param_set_field(&params, 0, 107, 3, 5);	/* bits/pixel */
+//		ipu_ch_param_set_field(&params, 1, 85, 4, 6);	/* pix format */
+//		ipu_ch_param_set_field(&params, 1, 78, 7, 63);	/* burst size */
+        ipu_ch_param_set_field(&params, 0, 107, 3, 3);	/* bits/pixel */
+        ipu_ch_param_set_field(&params, 1, 85, 4, 6);	/* pix format */
+        ipu_ch_param_set_field(&params, 1, 78, 7, 31);	/* burst size */
 
 		break;
 	case IPU_PIX_FMT_GENERIC_32:

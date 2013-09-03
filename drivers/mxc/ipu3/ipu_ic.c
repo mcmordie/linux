@@ -121,6 +121,7 @@ void _ipu_ic_enable_task(struct ipu_soc *ipu, ipu_channel_t channel)
 		break;
 	}
 	ipu_ic_write(ipu, ic_conf, IC_CONF);
+    ic_dump_register(ipu);
 }
 
 void _ipu_ic_disable_task(struct ipu_soc *ipu, ipu_channel_t channel)
@@ -166,6 +167,8 @@ void _ipu_vdi_init(struct ipu_soc *ipu, ipu_channel_t channel, ipu_channel_param
 	uint32_t reg;
 	uint32_t pixel_fmt;
 	uint32_t pix_per_burst;
+
+    pr_info("%s", __FUNCTION__);
 
 	reg = ((params->mem_prp_vf_mem.in_height-1) << 16) |
 	  (params->mem_prp_vf_mem.in_width-1);
@@ -240,6 +243,8 @@ void _ipu_ic_init_prpvf(struct ipu_soc *ipu, ipu_channel_params_t *params, bool 
 	uint32_t downsizeCoeff, resizeCoeff;
 	ipu_color_space_t in_fmt, out_fmt;
 
+    pr_info("%s", __FUNCTION__);
+
 	/* Setup vertical resizing */
 	if (!(params->mem_prp_vf_mem.outv_resize_ratio) ||
 		(params->mem_prp_vf_mem.outv_resize_ratio >=
@@ -252,7 +257,7 @@ void _ipu_ic_init_prpvf(struct ipu_soc *ipu, ipu_channel_params_t *params, bool 
 		reg = (params->mem_prp_vf_mem.outv_resize_ratio) << 16;
 
 	/* Setup horizontal resizing */
-	/* Upadeted for IC split case */
+    /* Updated for IC split case */
 	if (!(params->mem_prp_vf_mem.outh_resize_ratio) ||
 		(params->mem_prp_vf_mem.outh_resize_ratio >=
 						IC_RSZ_MAX_RESIZE_RATIO)) {
@@ -353,6 +358,7 @@ void _ipu_ic_uninit_prpvf(struct ipu_soc *ipu)
 
 void _ipu_ic_init_rotate_vf(struct ipu_soc *ipu, ipu_channel_params_t *params)
 {
+    pr_info("%s", __FUNCTION__);
 }
 
 void _ipu_ic_uninit_rotate_vf(struct ipu_soc *ipu)
@@ -368,6 +374,8 @@ void _ipu_ic_init_prpenc(struct ipu_soc *ipu, ipu_channel_params_t *params, bool
 	uint32_t reg, ic_conf;
 	uint32_t downsizeCoeff, resizeCoeff;
 	ipu_color_space_t in_fmt, out_fmt;
+
+    pr_info("%s", __FUNCTION__);
 
 	/* Setup vertical resizing */
 	if (!(params->mem_prp_enc_mem.outv_resize_ratio) ||
@@ -435,6 +443,7 @@ void _ipu_ic_uninit_prpenc(struct ipu_soc *ipu)
 
 void _ipu_ic_init_rotate_enc(struct ipu_soc *ipu, ipu_channel_params_t *params)
 {
+    pr_info("%s", __FUNCTION__);
 }
 
 void _ipu_ic_uninit_rotate_enc(struct ipu_soc *ipu)
@@ -451,6 +460,8 @@ void _ipu_ic_init_pp(struct ipu_soc *ipu, ipu_channel_params_t *params)
 	uint32_t reg, ic_conf;
 	uint32_t downsizeCoeff, resizeCoeff;
 	ipu_color_space_t in_fmt, out_fmt;
+
+    pr_info("%s", __FUNCTION__);
 
 	/* Setup vertical resizing */
 	if (!(params->mem_pp_mem.outv_resize_ratio) ||
@@ -563,6 +574,7 @@ void _ipu_ic_uninit_pp(struct ipu_soc *ipu)
 
 void _ipu_ic_init_rotate_pp(struct ipu_soc *ipu, ipu_channel_params_t *params)
 {
+    pr_info("%s", __FUNCTION__);
 }
 
 void _ipu_ic_uninit_rotate_pp(struct ipu_soc *ipu)
@@ -580,6 +592,9 @@ int _ipu_ic_idma_init(struct ipu_soc *ipu, int dma_chan,
 	u32 ic_idmac_1, ic_idmac_2, ic_idmac_3;
 	u32 temp_rot = bitrev8(rot) >> 5;
 	bool need_hor_flip = false;
+
+    pr_info("%s", __FUNCTION__);
+
 
 	if ((burst_size != 8) && (burst_size != 16)) {
 		dev_dbg(ipu->dev, "Illegal burst length for IC\n");
@@ -699,6 +714,7 @@ static void _init_csc(struct ipu_soc *ipu, uint8_t ic_task, ipu_color_space_t in
 		      ipu_color_space_t out_format, int csc_index)
 {
 
+
 /*     Y = R *  .299 + G *  .587 + B *  .114;
        U = R * -.169 + G * -.332 + B *  .500 + 128.;
        V = R *  .500 + G * -.419 + B * -.0813 + 128.;*/
@@ -730,6 +746,7 @@ static void _init_csc(struct ipu_soc *ipu, uint8_t ic_task, ipu_color_space_t in
 
 	uint32_t param;
 	uint32_t *base = NULL;
+    pr_info("%s", __FUNCTION__);
 
 	if (ic_task == IC_TASK_ENCODER) {
 		base = ipu->tpmem_base + 0x2008 / 4;
