@@ -1174,7 +1174,8 @@ int32_t ipu_init_channel_buffer(struct ipu_soc *ipu, ipu_channel_t channel,
         pr_info("Detected SMFC Channel");
 
         burst_size = _ipu_ch_param_get_burst_size(ipu, dma_chan);
-		if ((pixel_fmt == IPU_PIX_FMT_GENERIC) &&
+        if ((pixel_fmt == IPU_PIX_FMT_GENERIC ||
+             pixel_fmt == IPU_PIX_FMT_GREY) &&
 			((_ipu_ch_param_get_bpp(ipu, dma_chan) == 5) ||
             (_ipu_ch_param_get_bpp(ipu, dma_chan) == 3))){
 			burst_size = burst_size >> 4;
@@ -1182,11 +1183,12 @@ int32_t ipu_init_channel_buffer(struct ipu_soc *ipu, ipu_channel_t channel,
         else{
 			burst_size = burst_size >> 2;
         }
+        pr_info("burst size = %i", burst_size);
         _ipu_smfc_set_burst_size(ipu, channel, burst_size-1);
 
         //DMJM: new code:
-        pr_info("!!! setting RWS enable for generic sensor");
         if (pixel_fmt  == IPU_PIX_FMT_GENERIC){
+             pr_info("!!! setting RWS enable for generic sensor");
             ic_conf = ipu_ic_read(ipu, IC_CONF);
             ic_conf |= IC_CONF_RWS_EN;
             ic_conf &= ~IC_CONF_CSI_MEM_WR_EN;

@@ -74,7 +74,7 @@ static int csi_enc_setup(cam_data *cam)
 	int csi_id;
 #endif
 
-    pr_info("In csi_enc_setup\n");
+    pr_info("In csi_enc_setup with format = 0x%X\n", cam->v2f.fmt.pix.pixelformat);
 	if (!cam) {
 		printk(KERN_ERR "cam private is NULL\n");
 		return -ENXIO;
@@ -172,7 +172,7 @@ static int csi_enc_setup(cam_data *cam)
 		return err;
 	}
 
-    pr_info("setting up ipu from %s", __FUNCTION__);
+    pr_info("setting up ipu from %s with pixel format = 0x%X", __FUNCTION__, pixel_fmt);
 
 	err = ipu_init_channel_buffer(cam->ipu, CSI_MEM, IPU_OUTPUT_BUFFER,
 				      pixel_fmt, cam->v2f.fmt.pix.width,

@@ -46,7 +46,10 @@ static u32 truncate(u32 up, /* 0: down; else: up */
 
 static unsigned int f_calc(unsigned int pfs, unsigned int bpp, unsigned int *write)
 {/* return input_f */
-	unsigned int f_calculated = 0;
+
+    pr_info("In f_calc");
+
+    unsigned int f_calculated = 0;
 	switch (pfs) {
 	case IPU_PIX_FMT_YVU422P:
 	case IPU_PIX_FMT_YUV422P:
@@ -100,6 +103,8 @@ static unsigned int f_calc(unsigned int pfs, unsigned int bpp, unsigned int *wri
 
 static unsigned int m_calc(unsigned int pfs)
 {
+    pr_info("In m_calc");
+
 	unsigned int m_calculated = 0;
 	switch (pfs) {
 	case IPU_PIX_FMT_YUV420P2:

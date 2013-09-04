@@ -385,7 +385,9 @@ static int mxc_streamon(cam_data *cam)
 	unsigned long lock_flags;
 	int err = 0;
 
-	pr_debug("In MVC:mxc_streamon\n");
+    //cam->v2f.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY;
+
+    pr_debug("In MVC:mxc_streamon with pixel format = 0x%X\n", cam->v2f.fmt.pix.pixelformat);
 
 	if (NULL == cam) {
 		pr_err("ERROR! cam parameter is NULL\n");
@@ -1639,6 +1641,8 @@ static int mxc_v4l_open(struct file *file)
 		cam_fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 		vidioc_int_g_fmt_cap(cam->sensor, &cam_fmt);
 
+        pr_info("retrieved format of 0x%X from sensor", cam_fmt.fmt.pix.pixelformat);
+
 		/* Reset the sizes.  Needed to prevent carryover of last
 		 * operation.*/
 		cam->crop_bounds.top = cam->crop_bounds.left = 0;
@@ -2640,7 +2644,7 @@ static void init_camera_struct(cam_data *cam, struct platform_device *pdev)
 	cam->v2f.fmt.pix.bytesperline = 288 * 3 / 2;
 	cam->v2f.fmt.pix.width = 288;
 	cam->v2f.fmt.pix.height = 352;
-	cam->v2f.fmt.pix.pixelformat = V4L2_PIX_FMT_YUV420;
+    cam->v2f.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY;//V4L2_PIX_FMT_YUV420;
 	cam->win.w.width = 160;
 	cam->win.w.height = 160;
 	cam->win.w.left = 0;

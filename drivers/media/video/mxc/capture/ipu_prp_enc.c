@@ -97,7 +97,10 @@ static int prp_enc_setup(cam_data *cam)
 		enc.csi_prp_enc_mem.out_height = cam->v2f.fmt.pix.width;
 	}
 
-    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SBGGR10) {
+    if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_GREY) {
+        enc.csi_prp_enc_mem.out_pixel_fmt = IPU_PIX_FMT_GREY;
+        pr_info("GREY\n");
+    } else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_SBGGR10) {
         enc.csi_prp_enc_mem.out_pixel_fmt = IPU_PIX_FMT_GENERIC;
         pr_info("SGBBR10\n");
     } else if (cam->v2f.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420) {

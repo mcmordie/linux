@@ -280,6 +280,7 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 	switch (pixel_fmt) {
 
     case IPU_PIX_FMT_GREY:
+        pr_info("setting IDMAC channel parameters for Grey mode");
         ipu_ch_param_set_field(&params, 0, 107, 3, 5);	/* bits/pixel */
         ipu_ch_param_set_field(&params, 1, 85, 4, 6);	/* pix format */
         ipu_ch_param_set_field(&params, 1, 78, 7, 63);	/* burst size */
@@ -375,6 +376,7 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 		break;
 	case IPU_PIX_FMT_YUV420P2:
 	case IPU_PIX_FMT_YUV420P:
+        pr_info("Setting IDMAC channel parameters for YUV420P");
 		ipu_ch_param_set_field(&params, 1, 85, 4, 2);	/* pix format */
 
 		if (uv_stride < stride / 2)
@@ -390,6 +392,7 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 		}
 		break;
 	case IPU_PIX_FMT_YVU420P:
+        pr_info("Setting IDMAC channel parameters for YVU420P");
 		ipu_ch_param_set_field(&params, 1, 85, 4, 2);	/* pix format */
 
 		if (uv_stride < stride / 2)
@@ -406,6 +409,7 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 		break;
 	case IPU_PIX_FMT_YVU422P:
 		/* BPP & pixel format */
+        pr_info("Setting IDMAC channel parameters for YVU422P");
 		ipu_ch_param_set_field(&params, 1, 85, 4, 1);	/* pix format */
 		ipu_ch_param_set_field(&params, 1, 78, 7, 31);	/* burst size */
 
@@ -417,6 +421,7 @@ static inline void _ipu_ch_param_init(struct ipu_soc *ipu, int ch,
 		break;
 	case IPU_PIX_FMT_YUV422P:
 		/* BPP & pixel format */
+        pr_info("Setting IDMAC channel parameters for YUV422P");
 		ipu_ch_param_set_field(&params, 1, 85, 4, 1);	/* pix format */
 		ipu_ch_param_set_field(&params, 1, 78, 7, 31);	/* burst size */
 
